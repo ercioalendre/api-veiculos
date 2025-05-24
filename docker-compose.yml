@@ -1,0 +1,37 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node_app
+    ports:
+      - '3333:3333'
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/vehicle
+      - APP_NAME=api-veiculos
+      - TZ=America/Sao_Paulo
+      - PORT=3333
+      - RATE_LIMITING_TTL=60000
+      - RATE_LIMITING_LIMIT=60
+      - PRISMA_HIDE_UPDATE_MESSAGE=true
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: sh ./entrypoint.sh
+
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: vehicle
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

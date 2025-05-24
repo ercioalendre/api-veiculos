@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id             String    @id @db.Uuid
+  licensePlate   String    @unique @db.VarChar(10)
+  chassi         String    @unique @db.VarChar(17)
+  renavam        String    @unique @db.VarChar(11)
+  manufacturer   String    @db.VarChar
+  model          String    @db.VarChar
+  productionYear String    @db.Char(4)
+  createdAt      DateTime  @db.Timestamp(6)
+  updatedAt      DateTime? @db.Timestamp(6)
+}
